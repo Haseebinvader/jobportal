@@ -19,11 +19,19 @@ const Jobs = () => {
     useEffect(() => {
         if (searchedQuery) {
             const filteredJobs = allJobs.filter((job) => {
-                const query = typeof searchedQuery === 'string' ? searchedQuery.toLowerCase() : '';
-                return job.title.toLowerCase().includes(query) ||
-                    job.description.toLowerCase().includes(query) ||
-                    job.location.toLowerCase().includes(query);
+                const queryLower = typeof searchedQuery === 'string' ? searchedQuery.toLowerCase() : '';
+                let salaryQuery = Number(searchedQuery);
+                let matchesSalary = !isNaN(salaryQuery) && job.salary === salaryQuery;
+
+                return job.title.toLowerCase().includes(queryLower) ||
+                    job.description.toLowerCase().includes(queryLower) ||
+                    job.location.toLowerCase().includes(queryLower) ||
+                    matchesSalary ||  // Ensure this condition is correctly evaluating
+                    job.jobType.toLowerCase().includes(queryLower);
             });
+
+
+
             setFilterJobs(filteredJobs);
         } else {
             setFilterJobs(allJobs);

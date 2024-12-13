@@ -18,10 +18,12 @@ const JobDescription = () => {
     const [allJobsStatus, setAllJobsStatus] = useState("Open")
 
     useEffect(() => {
-        const allJobsClosedORPaused = allJobs.map((item) => item.jobStatus == "Close" || item.jobStatus == "Pause")
+        const allJobsClosedORPaused = singleJob?.jobStatus == "Close" || singleJob?.jobStatus == "Pause"
         console.log(allJobsClosedORPaused);
         setAllJobsStatus(allJobsClosedORPaused)
     }, [allJobs])
+
+    console.log(singleJob, allJobsStatus);
 
 
 
@@ -75,6 +77,7 @@ const JobDescription = () => {
                     </div>
                     <Button
                         onClick={() => {
+
                             if (allJobsStatus) {
                                 if (!isApplied) {
                                     applyJobHandler();

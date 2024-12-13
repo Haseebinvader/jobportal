@@ -41,7 +41,6 @@ const jobSchema = new mongoose.Schema(
     },
     showName: {
       type: Boolean,
-      required: true,
     },
     jobStatus: {
       type: String,

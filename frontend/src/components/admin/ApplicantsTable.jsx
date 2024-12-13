@@ -11,8 +11,9 @@ const shortlistingStatus = ["Accepted", "Rejected"];
 
 const ApplicantsTable = () => {
     const { applicants } = useSelector(store => store.application);
+    const { user } = useSelector(store => store.auth);
 
-    console.log(applicants);
+    console.log(applicants, user);
 
     const statusHandler = async (status, id) => {
         console.log('called');

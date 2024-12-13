@@ -13,8 +13,6 @@ import { toast } from 'sonner'
 const UpdateProfileDialog = ({ open, setOpen }) => {
     const [loading, setLoading] = useState(false);
     const { user } = useSelector(store => store.auth);
-    console.log(user);
-
 
     const [input, setInput] = useState({
         fullname: user?.fullname || "",
@@ -141,7 +139,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                 <Label htmlFor="file" className="text-right">Resume</Label>
                                 <Input
                                     id="file"
-                                    name="resume"
+                                    name="file"
                                     type="file"
                                     accept="application/pdf"
                                     onChange={fileChangeHandler}

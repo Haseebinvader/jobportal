@@ -12,21 +12,20 @@ import { useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group'
 
-const companyArray = [];
 
 const PostJob = () => {
     const [input, setInput] = useState({
         title: "",
         description: "",
-        nationality: "United Arab Emirates",
-        gender: "male",
+        nationality: "",
+        gender: "",
         Language: "",
         salary: "",
         location: "",
         jobType: "",
         experience: "",
         position: 0,
-        showName: "false",
+        showName: "",
         companyId: "",
         jobStatus: "Open"
     });
@@ -36,6 +35,7 @@ const PostJob = () => {
     const navigate = useNavigate();
     const toggleHandler = () => {
         setIsToggled(!isToggled); // Toggle the state
+        setInput({ ...input, showName: isToggled }); // Update showName based on the new toggle state
     };
     const { companies } = useSelector(store => store.company);
     const changeEventHandler = (e) => {
@@ -45,10 +45,22 @@ const PostJob = () => {
         setInput({ ...input, showName: value });
     };
 
-    const selectChangeHandler = (value) => {
-        const selectedCompany = companies.find((company) => company.name.toLowerCase() === value);
-        setInput({ ...input, companyId: selectedCompany?._id });
+    const selectChangeHandler = (field, value) => {
+
+        if (field === 'nationality') {
+            setInput({ ...input, nationality: value });
+        } else if (field === 'gender') {
+            setInput({ ...input, gender: value });
+        }
+
     };
+
+    const selectCompanyHandler = async (value) => {
+        const selectedCompany = await companies.find((company) => company?.name.toLowerCase() === value);
+        setInput({ ...input, companyId: selectedCompany?._id });
+        console.log(selectedCompany, ...input);
+    }
+
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -98,7 +110,6 @@ const PostJob = () => {
     const genders = [
         "Male", "Female", "Prefer Not to Say"
     ]
-    console.log();
 
     return (
         <div>
@@ -225,7 +236,7 @@ const PostJob = () => {
 
                         {
                             companies.length > 0 && (
-                                <Select onValueChange={selectChangeHandler}>
+                                <Select onValueChange={selectCompanyHandler}>
                                     <SelectTrigger className="w-[180px]">
                                         <SelectValue placeholder="Select a Company" />
                                     </SelectTrigger>

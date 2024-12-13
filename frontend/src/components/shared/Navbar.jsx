@@ -2,7 +2,7 @@ import React from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Avatar, AvatarImage } from '../ui/avatar'
-import { LogOut, User2 } from 'lucide-react'
+import { CircleUser, LogOut, User, User2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
@@ -62,16 +62,17 @@ const Navbar = () => {
                         ) : (
                             <Popover>
                                 <PopoverTrigger asChild>
-                                    <Avatar className="cursor-pointer">
-                                        <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" />
-                                    </Avatar>
+                                    {/* <Avatar className="cursor-pointer"> */}
+                                    <CircleUser className='cursor-pointer' />
+                                    {/* <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" /> */}
+                                    {/* </Avatar> */}
                                 </PopoverTrigger>
                                 <PopoverContent className="w-80">
                                     <div className=''>
-                                        <div className='flex gap-2 space-y-2'>
-                                            <Avatar className="cursor-pointer">
-                                                <AvatarImage src={user?.profile?.profilePhoto} alt="@shadcn" />
-                                            </Avatar>
+                                        <div className='flex items-center gap-2 space-y-2'>
+                                            {/* <Avatar className="cursor-pointer"> */}
+                                                <User className='cursor-pointer'/>
+                                            {/* </Avatar> */}
                                             <div>
                                                 <h4 className='font-medium'>{user?.fullname}</h4>
                                                 <p className='text-sm text-muted-foreground'>{user?.profile?.bio}</p>
@@ -79,9 +80,9 @@ const Navbar = () => {
                                         </div>
                                         <div className='flex flex-col my-2 text-gray-600'>
                                             {
-                                                user && user.role === 'jobseeker' && (
+                                                user && user?.role === 'jobseeker' && (
                                                     <div className='flex w-fit items-center gap-2 cursor-pointer'>
-                                                        <User2 />
+                                                        <CircleUser />
                                                         <Button variant="link"> <Link to="/profile">View Profile</Link></Button>
                                                     </div>
                                                 )

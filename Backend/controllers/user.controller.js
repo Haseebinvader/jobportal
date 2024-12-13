@@ -1,8 +1,8 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
+import getDataUri from "../utils/datauri.js";
 export const register = async (req, res) => {
   try {
     const {
@@ -15,7 +15,6 @@ export const register = async (req, res) => {
       role,
       noticePeriod,
     } = req.body;
-    console.log(fullname, email, phoneNumber, password, role);
 
     if (
       !fullname ||
@@ -31,12 +30,15 @@ export const register = async (req, res) => {
         .status(400)
         .json({ message: "All fields are required!", success: false });
     }
+    const file = req.file;
+
     const user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({
         message: "User already exist with this email!",
       });
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     await User.create({
       fullname,
@@ -91,7 +93,7 @@ export const login = async (req, res) => {
       userId: user._id,
     };
 
-    const token = await jwt.sign(tokenData, process.env.SECRET_KEY, {
+    const token = jwt.sign(tokenData, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
 
@@ -140,9 +142,8 @@ export const updateProfile = async (req, res) => {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
 
     const file = req.file;
+
     // cloudinary ayega idhar
-    const fileUri = getDataUri(file);
-    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
     let skillsArray;
     if (skills) {
@@ -150,6 +151,7 @@ export const updateProfile = async (req, res) => {
     }
     const userId = req.id; // middleware authentication
     let user = await User.findById(userId);
+    console.log(user);
 
     if (!user) {
       return res.status(400).json({
@@ -157,18 +159,20 @@ export const updateProfile = async (req, res) => {
         success: false,
       });
     }
+    if (file) {
+      const fileUri = getDataUri(file);
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+      if (cloudResponse) {
+        user.profile.resume = cloudResponse.secure_url;
+        user.profile.resumeOriginalName = file.originalname;
+      }
+    }
     // updating data
     if (fullname) user.fullname = fullname;
     if (email) user.email = email;
     if (phoneNumber) user.phoneNumber = phoneNumber;
     if (bio) user.profile.bio = bio;
     if (skills) user.profile.skills = skillsArray;
-
-    // resume comes later here...
-    if (cloudResponse) {
-      user.profile.resume = cloudResponse.secure_url; // save the cloudinary url
-      user.profile.resumeOriginalName = file.originalname; // Save the original file name
-    }
 
     await user.save();
 

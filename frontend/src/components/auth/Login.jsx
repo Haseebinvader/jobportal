@@ -22,6 +22,7 @@ const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
     }
@@ -38,7 +39,13 @@ const Login = () => {
             });
             if (res.data.success) {
                 dispatch(setUser(res.data.user));
-                navigate("/");
+                console.log(res.data.user);
+
+                if (res.data.user === "jobseeker") {
+                    navigate("/profile");
+                } else {
+                    navigate("/admin/companies");
+                }
                 toast.success(res.data.message);
             }
         } catch (error) {

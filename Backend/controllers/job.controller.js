@@ -32,7 +32,6 @@ export const postJob = async (req, res) => {
         !experience ||
         !position ||
         !companyId,
-      !showName,
       !jobStatus)
     ) {
       return res.status(400).json({
@@ -53,7 +52,7 @@ export const postJob = async (req, res) => {
       position,
       company: companyId,
       created_by: userId,
-      showName,
+      showName: true,
       jobStatus: "Open",
     });
     return res.status(201).json({

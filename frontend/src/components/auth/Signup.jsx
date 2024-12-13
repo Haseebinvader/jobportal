@@ -23,13 +23,15 @@ const Signup = () => {
         domesticExp: "",
         InternationalExp: "",
         file: "",
-        noticePeriod: ""
+        noticePeriod: "",
     });
     console.log(input);
 
     const { loading, user } = useSelector(store => store.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    console.log(user);
+
 
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -180,8 +182,10 @@ const Signup = () => {
                             </div>
                         </RadioGroup>
                         <div className='flex items-center gap-2'>
-                            <Label>Profile</Label>
+                            <Label htmlFor="file">Profile</Label>
                             <Input
+                                id="file"
+                                name="profilePhoto"
                                 accept="image/*"
                                 type="file"
                                 onChange={changeFileHandler}
