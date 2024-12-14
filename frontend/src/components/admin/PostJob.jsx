@@ -8,26 +8,30 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import axios from 'axios'
 import { JOB_API_END_POINT } from '@/utils/constant'
 import { toast } from 'sonner'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group'
 
 
 const PostJob = () => {
+    const { state } = useLocation(); // Access the passed state
+    console.log(state);
+
+
     const [input, setInput] = useState({
-        title: "",
-        description: "",
-        nationality: "",
-        gender: "",
-        Language: "",
-        salary: "",
-        location: "",
-        jobType: "",
-        experience: "",
-        position: 0,
-        showName: "",
-        companyId: "",
-        jobStatus: "Open"
+        title: state?.title || "",
+        description: state?.description || "",
+        nationality: state?.nationality || "",
+        gender: state?.gender || "",
+        Language: state?.Language || "",
+        salary: state?.salary || "",
+        location: state?.location || "",
+        jobType: state?.jobType || "",
+        experience: state?.experienceLevel || "",
+        position: state?.position || 0,
+        showName: state?.showName || "",
+        companyId: state?.companyId || "",
+        jobStatus: state?.jobStatus || "Open"
     });
     const [loading, setLoading] = useState(false);
     const [isToggled, setIsToggled] = useState(true); // State to manage toggle

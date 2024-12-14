@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cloudinary from "../utils/cloudinary.js";
 import getDataUri from "../utils/datauri.js";
+
 export const register = async (req, res) => {
   try {
     const {
@@ -14,48 +15,57 @@ export const register = async (req, res) => {
       InternationalExp,
       role,
       noticePeriod,
+      jobTitle,
     } = req.body;
 
-    if (
-      !fullname ||
-      !email ||
-      !phoneNumber ||
-      !password ||
-      !role ||
-      !domesticExp ||
-      !InternationalExp ||
-      !noticePeriod
-    ) {
+    // Check for fields based on role
+    const baseFields =
+      !fullname || !email || !phoneNumber || !password || !role;
+    const jobSeekerFields =
+      role === "jobseeker" &&
+      (!domesticExp || !InternationalExp || !noticePeriod || !jobTitle);
+
+    if (baseFields || (role === "jobseeker" && jobSeekerFields)) {
       return res
         .status(400)
         .json({ message: "All fields are required!", success: false });
     }
-    const file = req.file;
 
     const user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({
-        message: "User already exist with this email!",
-      });
+      return res
+        .status(400)
+        .json({ message: "User already exist with this email!" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await User.create({
+    const userData = {
       fullname,
       email,
       phoneNumber,
-      domesticExp,
-      InternationalExp,
       password: hashedPassword,
       role,
-      noticePeriod,
-    });
+    };
+
+    if (role === "jobseeker") {
+      Object.assign(userData, {
+        domesticExp,
+        InternationalExp,
+        noticePeriod,
+        jobTitle,
+      });
+    }
+
+    await User.create(userData);
+
     return res.status(201).json({
       message: "Account Created Successfully!",
-      success: "true",
+      user: userData,
+      success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -162,6 +172,8 @@ export const updateProfile = async (req, res) => {
     if (file) {
       const fileUri = getDataUri(file);
       const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+      console.log(cloudResponse);
+
       if (cloudResponse) {
         user.profile.resume = cloudResponse.secure_url;
         user.profile.resumeOriginalName = file.originalname;
@@ -195,5 +207,28 @@ export const updateProfile = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getAllJobSeekers = async (req, res) => {
+  try {
+    const jobSeekers = await User.find({ role: "jobseeker" }); // Change 'jobStatus' to 'role'
+    if (jobSeekers.length === 0) {
+      return res.status(404).json({
+        message: "No job seekers found.",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Job seekers retrieved successfully.",
+      data: jobSeekers,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "An error occurred while retrieving job seekers.",
+      success: false,
+    });
   }
 };

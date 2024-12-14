@@ -54,9 +54,8 @@ const Jobs = () => {
                         placeholder='Find your dream jobs'
                         onChange={(e) => setQuery(e.target.value)}
                         className='outline-none border-none w-full'
-
                     />
-                    <Button onClick={searchJobHandler} className="rounded-r-full bg-[#6A38C2]">
+                    <Button onClick={searchJobHandler} className="rounded-r-full bg-yellow-600 text-center">
                         <Search className='h-5 w-5' />
                     </Button>
                 </div>

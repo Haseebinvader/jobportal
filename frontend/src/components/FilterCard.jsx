@@ -59,7 +59,7 @@ const FilterCard = () => {
         <div className='w-full bg-white p-3 rounded-md'>
             <div className='flex justify-between items-center'>
                 <h1 className='font-bold text-lg'>Filter Jobs</h1>
-                <FilterX className='cursor-pointer' onClick={handleClear} />
+                <FilterX className='cursor-pointer text-yellow-600' onClick={handleClear} />
             </div>
             <hr className='mt-3' />
             <RadioGroup value={selectedValue} onValueChange={changeHandler}>

@@ -1,0 +1,8 @@
+.home-background {
+    background-image: url('/path-to-your-image.jpg'); /* Replace with your image path */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+  }
+  

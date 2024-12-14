@@ -19,11 +19,18 @@ const CompanySetup = () => {
         description: "",
         website: "",
         location: "",
+        LicanseNumber: "",
         file: null
     });
     const { singleCompany } = useSelector(store => store.company);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (singleCompany) {
+          setInput(prev => ({ ...prev, ...singleCompany }));
+        }
+      }, [singleCompany]);
 
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -46,7 +53,7 @@ const CompanySetup = () => {
         }
         try {
             setLoading(true);
-            const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params.id}`, formData, {
+            const res = await axios.put(`${COMPANY_API_END_POINT}/update/${params?.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
@@ -70,6 +77,7 @@ const CompanySetup = () => {
             description: singleCompany?.description || "",
             website: singleCompany?.website || "",
             location: singleCompany?.location || "",
+            LicanseNumber: singleCompany?.LicanseNumber || "",
             file: singleCompany?.file || null
         })
     }, [singleCompany]);
@@ -92,7 +100,7 @@ const CompanySetup = () => {
                             <Input
                                 type="text"
                                 name="name"
-                                value={input.name}
+                                value={input?.name}
                                 onChange={changeEventHandler}
                             />
                         </div>
@@ -101,16 +109,16 @@ const CompanySetup = () => {
                             <Input
                                 type="text"
                                 name="description"
-                                value={input.description}
+                                value={input?.description}
                                 onChange={changeEventHandler}
                             />
                         </div>
                         <div>
-                            <Label>Website</Label>
+                            <Label>Trade Licanse Number</Label>
                             <Input
-                                type="text"
+                                type="number"
                                 name="website"
-                                value={input.website}
+                                value={input?.website}
                                 onChange={changeEventHandler}
                             />
                         </div>
@@ -119,15 +127,17 @@ const CompanySetup = () => {
                             <Input
                                 type="text"
                                 name="location"
-                                value={input.location}
+                                value={input?.location}
                                 onChange={changeEventHandler}
                             />
                         </div>
                         <div>
-                            <Label>Logo</Label>
+                            <Label>Upload Trade Licanse</Label>
                             <Input
+                                id="file"
+                                name="file"
                                 type="file"
-                                accept="image/*"
+                                accept="application/pdf"
                                 onChange={changeFileHandler}
                             />
                         </div>

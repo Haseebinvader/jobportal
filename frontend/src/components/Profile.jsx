@@ -9,6 +9,7 @@ import AppliedJobTable from './AppliedJobTable'
 import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
 import useGetAppliedJobs from '@/hooks/useGetAppliedJobs'
+import { Link } from 'react-router-dom'
 
 // const skills = ["Html", "Css", "Javascript", "Reactjs"]
 const isResume = true;
@@ -57,7 +58,10 @@ const Profile = () => {
                 <div className='grid w-full max-w-sm items-center gap-1.5'>
                     <Label className="text-md font-bold">Resume</Label>
                     {
-                        isResume ? <a target='blank' href={user?.profile?.resume} rel="noopener noreferrer" className='text-blue-500 w-full hover:underline cursor-pointer'>{user?.profile?.resumeOriginalName}</a> : <span>NA</span>
+                        isResume ? <Link target='blank' to={user?.profile?.resume[0]} rel="noopener noreferrer" className='text-blue-500 w-full hover:underline cursor-pointer'>
+                            {user?.profile?.resumeOriginalName}
+                        </Link>
+                            : <span>NA</span>
                     }
                 </div>
             </div>

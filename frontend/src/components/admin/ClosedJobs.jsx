@@ -134,14 +134,14 @@ const ClosedJobs = () => {
                                                         <Eye className='w-4' />
                                                         <span>Open</span>
                                                     </div>
-                                                    <div onClick={() => handleStatusChange(job._id, 'Close')} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
+                                                    {/* <div onClick={() => handleStatusChange(job._id, 'Close')} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
                                                         <EyeOff className='w-4' />
                                                         <span>Close</span>
-                                                    </div>
-                                                    <div onClick={() => handleStatusChange(job._id, 'Pause')} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
+                                                    </div> */}
+                                                    {/* <div onClick={() => handleStatusChange(job._id, 'Pause')} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
                                                         <CirclePause className='w-4' />
                                                         <span>Pause</span>
-                                                    </div>
+                                                    </div> */}
                                                 </PopoverContent>
                                             </Popover>
                                         </TableCell>

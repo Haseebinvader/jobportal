@@ -24,6 +24,7 @@ const Signup = () => {
         InternationalExp: "",
         file: "",
         noticePeriod: "",
+        jobTitle: ""
     });
     console.log(input);
 
@@ -41,17 +42,21 @@ const Signup = () => {
     }
     const submitHandler = async (e) => {
         e.preventDefault();
-        const formData = new FormData();    //formdata object
+        const formData = new FormData();
         formData.append("fullname", input.fullname);
         formData.append("email", input.email);
         formData.append("phoneNumber", input.phoneNumber);
         formData.append("password", input.password);
-        formData.append("domesticExp", input.domesticExp);
-        formData.append("InternationalExp", input.InternationalExp);
-        formData.append("noticePeriod", input.noticePeriod);
         formData.append("role", input.role);
-        if (input.file) {
-            formData.append("file", input.file);
+
+        if (input.role === 'jobseeker') {
+            formData.append("domesticExp", input.domesticExp);
+            formData.append("InternationalExp", input.InternationalExp);
+            formData.append("noticePeriod", input.noticePeriod);
+            formData.append("jobTitle", input.jobTitle);
+            if (input.file) {
+                formData.append("file", input.file);
+            }
         }
 
         try {
@@ -60,19 +65,18 @@ const Signup = () => {
                 headers: { 'Content-Type': "multipart/form-data" },
                 withCredentials: true,
             });
-            console.log(res, res.data);
 
             if (res.data.success) {
                 navigate("/login");
                 toast.success(res.data.message);
             }
         } catch (error) {
-            console.log(error);
             toast.error(error.response.data.message);
         } finally {
             dispatch(setLoading(false));
         }
     }
+
 
     useEffect(() => {
         if (user) {
@@ -125,37 +129,6 @@ const Signup = () => {
                             placeholder="Enter Password"
                         />
                     </div>
-
-                    <div className='my-2'>
-                        <Label>Domestic Work Experience</Label>
-                        <Input
-                            type="text"
-                            value={input.domesticExp}
-                            name="domesticExp"
-                            onChange={changeEventHandler}
-                            placeholder="Enter Domestic Experience in Years"
-                        />
-                    </div>
-                    <div className='my-2'>
-                        <Label>UAE Work Experience</Label>
-                        <Input
-                            type="InternationalExp"
-                            value={input.InternationalExp}
-                            name="InternationalExp"
-                            onChange={changeEventHandler}
-                            placeholder="Enter International Experience in Years"
-                        />
-                    </div>
-                    <div className='my-2'>
-                        <Label>Notice Period</Label>
-                        <Input
-                            type="text"
-                            value={input.noticePeriod}
-                            name="noticePeriod"
-                            onChange={changeEventHandler}
-                            placeholder="Enter Notice Period in Months"
-                        />
-                    </div>
                     <div className='flex items-center justify-between'>
                         <RadioGroup className="flex items-center gap-4 my-4">
                             <div className="flex items-center space-x-2">
@@ -181,7 +154,7 @@ const Signup = () => {
                                 <Label htmlFor="r2">Recruiter</Label>
                             </div>
                         </RadioGroup>
-                        <div className='flex items-center gap-2'>
+                        {/* <div className='flex items-center gap-2'>
                             <Label htmlFor="file">Profile</Label>
                             <Input
                                 id="file"
@@ -191,8 +164,55 @@ const Signup = () => {
                                 onChange={changeFileHandler}
                                 className="cursor-pointer"
                             />
-                        </div>
+                        </div> */}
                     </div>
+                    {input.role === "jobseeker" ? (
+                        <>
+                            <div className='my-2'>
+                                <Label>Job Title</Label>
+                                <Input
+                                    type="text"
+                                    value={input.jobTitle}
+                                    name="jobTitle"
+                                    onChange={changeEventHandler}
+                                    placeholder="Enter Job Title"
+                                />
+                            </div>
+                            <div className='my-2'>
+                                <Label>Domestic Work Experience</Label>
+                                <Input
+                                    type="text"
+                                    value={input.domesticExp}
+                                    name="domesticExp"
+                                    onChange={changeEventHandler}
+                                    placeholder="Enter Domestic Experience in Years"
+                                />
+                            </div>
+                            <div className='my-2'>
+                                <Label>UAE Work Experience</Label>
+                                <Input
+                                    type="InternationalExp"
+                                    value={input.InternationalExp}
+                                    name="InternationalExp"
+                                    onChange={changeEventHandler}
+                                    placeholder="Enter International Experience in Years"
+                                />
+                            </div>
+                            <div className='my-2'>
+                                <Label>Notice Period</Label>
+                                <Input
+                                    type="text"
+                                    value={input.noticePeriod}
+                                    name="noticePeriod"
+                                    onChange={changeEventHandler}
+                                    placeholder="Enter Notice Period in Months"
+                                />
+                            </div>
+                        </>
+                    ) : ""}
+
+
+
                     {
                         loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Signup</Button>
                     }

@@ -11,19 +11,20 @@ import Navbar from './shared/Navbar';
 import Footer from './shared/Footer';
 
 const JobDescription = () => {
-    const { allJobs, singleJob } = useSelector(store => store.job);
+    const { singleJob } = useSelector(store => store.job);
     const { user } = useSelector(store => store.auth);
-    const isIntiallyApplied = singleJob?.applications?.some(application => application.applicant === user?._id) || false;
+    const isIntiallyApplied = singleJob?.applications?.some(application => application?.applicant === user?._id) || false;
     const [isApplied, setIsApplied] = useState(isIntiallyApplied);
-    const [allJobsStatus, setAllJobsStatus] = useState("Open")
+    const [isJobOpen, setIsJobOpen] = useState(singleJob?.jobStatus === "Open");
+
 
     useEffect(() => {
-        const allJobsClosedORPaused = singleJob?.jobStatus == "Close" || singleJob?.jobStatus == "Pause"
-        console.log(allJobsClosedORPaused);
-        setAllJobsStatus(allJobsClosedORPaused)
-    }, [allJobs])
+        setIsJobOpen(singleJob?.jobStatus === "Open"); // Directly check if job is open
+    }, [singleJob]);
 
-    console.log(singleJob, allJobsStatus);
+    console.log(singleJob, isJobOpen);
+
+
 
 
 
@@ -78,7 +79,7 @@ const JobDescription = () => {
                     <Button
                         onClick={() => {
 
-                            if (allJobsStatus) {
+                            if (isJobOpen) {
                                 if (!isApplied) {
                                     applyJobHandler();
                                 } else {

@@ -12,6 +12,9 @@ import { JOB_API_END_POINT } from '@/utils/constant'
 
 const AdminJobsTable = () => {
     const { allAdminJobs, searchJobByText } = useSelector(store => store.job);
+    const { applicants } = useSelector(store => store.application);
+    console.log(applicants?.applications?.length);
+
     const dispatch = useDispatch();
 
     console.log(allAdminJobs);
@@ -37,7 +40,7 @@ const AdminJobsTable = () => {
     const handleStatusChange = async (jobId, status) => {
         console.log(`Attempting to update job ${jobId} to status ${status}`);
         console.log(jobId);
-        
+
         try {
             dispatch(setLoading(true));
             const res = await axios.post(`${JOB_API_END_POINT}/updatejob/${jobId}`, {
@@ -63,6 +66,35 @@ const AdminJobsTable = () => {
         }
     }
 
+    const handleCopyJob = async (jobId) => {
+        try {
+            // Fetch the job details from the API
+            dispatch(setLoading(true));
+            const res = await axios.get(`${JOB_API_END_POINT}/get/${jobId}`, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true
+            });
+
+            // If job details fetched successfully
+            if (res.status === 200) {
+                toast.success('Job details copied successfully');
+                const jobDetails = res.data.job;
+
+                // Navigate to the Create Job page and pass the job details as state
+                navigate('/admin/jobs/create', { state: jobDetails });
+            } else {
+                throw new Error('Failed to fetch job details');
+            }
+        } catch (error) {
+            console.error('Error copying job:', error);
+            toast.error(error.response?.data.message || 'Failed to copy job');
+        } finally {
+            dispatch(setLoading(false));
+        }
+    }
+
 
     return (
         <div>
@@ -71,8 +103,10 @@ const AdminJobsTable = () => {
                 <TableHeader>
                     <TableRow>
                         <TableHead>Company Name</TableHead>
-                        <TableHead>Role</TableHead>
-                        <TableHead>Date</TableHead>
+                        <TableHead>Job Title</TableHead>
+                        <TableHead>Posted Date</TableHead>
+                        <TableHead className='text-center'>Applicants</TableHead>
+                        <TableHead className='text-center'>Sponcership Status</TableHead>
                         <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -83,6 +117,9 @@ const AdminJobsTable = () => {
                                 <TableCell>{job?.company?.name}</TableCell>
                                 <TableCell>{job?.title}</TableCell>
                                 <TableCell>{job?.createdAt.split("T")[0]}</TableCell>
+                                <TableCell className='cursor-pointer underline text-center' onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}>{applicants?.applications?.length}</TableCell>
+                                <TableCell className='text-center'>Free</TableCell>
+
                                 <TableCell className="text-right cursor-pointer">
                                     <Popover>
                                         <PopoverTrigger><MoreHorizontal /></PopoverTrigger>
@@ -95,10 +132,10 @@ const AdminJobsTable = () => {
                                                 <Users className='w-4' />
                                                 <span>Applicants</span>
                                             </div>
-                                            <div onClick={() => handleStatusChange(job._id, 'Open')} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
+                                            {/* <div onClick={() => handleStatusChange(job._id, 'Open')} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
                                                 <Eye className='w-4' />
                                                 <span>Open</span>
-                                            </div>
+                                            </div> */}
                                             <div onClick={() => handleStatusChange(job._id, 'Close')} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
                                                 <EyeOff className='w-4' />
                                                 <span>Close</span>
@@ -107,9 +144,15 @@ const AdminJobsTable = () => {
                                                 <CirclePause className='w-4' />
                                                 <span>Pause</span>
                                             </div>
+                                            <div onClick={() => handleCopyJob(job._id)} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
+                                                <CirclePause className='w-4' />
+                                                <span>Copy Job</span>
+                                            </div>
+
                                         </PopoverContent>
                                     </Popover>
                                 </TableCell>
+
                             </tr>
 
                         ))

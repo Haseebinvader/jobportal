@@ -49,7 +49,7 @@ const Job = ({ job }) => {
                 <Badge className={'text-[#7209b7] font-bold'} variant="ghost">Annual Salary: {job?.salary}</Badge>
             </div>
             <div className='flex items-center gap-4 mt-4 w-full border'>
-                <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline" className='w-full bg-[#7209b7] text-white'>Details</Button>
+                <Button onClick={() => navigate(`/description/${job?._id}`)} variant="outline" className='w-full bg-yellow-600 text-white'>Details</Button>
                 {/* <Button className="bg-[#7209b7]">Save For Later</Button> */}
             </div>
         </div>

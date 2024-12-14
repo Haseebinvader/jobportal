@@ -16,9 +16,7 @@ const companySchema = new mongoose.Schema(
     location: {
       type: String,
     },
-    logo: {
-      type: String, //URL to company logo
-    },
+    logo: [{ type: String }],
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

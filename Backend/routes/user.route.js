@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getAllJobSeekers,
   login,
   logout,
   register,
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router.route("/register").post(singleUpload, register);
 router.route("/login").post(login);
+router.get("/jobseekers", getAllJobSeekers);
 router.route("/logout").get(logout);
 router
   .route("/profile/update")

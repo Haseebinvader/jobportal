@@ -21,15 +21,27 @@ const userSchema = new mongoose.Schema(
     },
     noticePeriod: {
       type: String,
-      required: true,
+      required: function () {
+        return this.role === "jobseeker";
+      },
+    },
+    jobTitle: {
+      type: String,
+      required: function () {
+        return this.role === "jobseeker";
+      },
     },
     domesticExp: {
       type: String,
-      required: true,
+      required: function () {
+        return this.role === "jobseeker";
+      },
     },
     InternationalExp: {
       type: String,
-      required: true,
+      required: function () {
+        return this.role === "jobseeker";
+      },
     },
     role: {
       type: String,
