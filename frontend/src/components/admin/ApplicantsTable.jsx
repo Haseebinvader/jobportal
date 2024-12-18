@@ -19,7 +19,7 @@ const ApplicantsTable = () => {
     useEffect(() => {
         // Initialize applicant statuses when the component loads
         const initialStatuses = applicants?.applications?.reduce((acc, applicant) => {
-            acc[applicant._id] = applicant?.status || 'Pending';
+            acc[applicant._id] = applicant?.status;
             return acc;
         }, {});
 
@@ -29,6 +29,8 @@ const ApplicantsTable = () => {
     console.log(applicants, user);
 
     const statusHandler = async (status, id) => {
+        console.log(status);
+
         console.log('called');
         try {
             axios.defaults.withCredentials = true;
