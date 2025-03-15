@@ -48,15 +48,18 @@ const Jobs = () => {
         <div>
             <Navbar />
             <div className='max-w-7xl mx-auto mt-5 '>
-                <div className='flex w-[40%] shadow-lg border border-gray-200 pl-3 rounded-full items-center gap-4 mx-auto my-6 '>
+                <div className="flex w-[40%] shadow-md bg-white border border-gray-200 rounded-full items-center gap-4 px-2 mx-auto m-6">
                     <input
                         type="text"
-                        placeholder='Find your dream jobs'
+                        placeholder="Find your dream job"
                         onChange={(e) => setQuery(e.target.value)}
-                        className='outline-none border-none w-full'
+                        className="outline-none w-full bg-transparent text-gray-700 placeholder-gray-400 "
                     />
-                    <Button onClick={searchJobHandler} className="rounded-r-full bg-yellow-600 text-center">
-                        <Search className='h-5 w-5' />
+                    <Button
+                        onClick={searchJobHandler}
+                        className="rounded-full bg-yellow-500 hover:bg-yellow-600 text-white transition duration-200 shadow-sm"
+                    >
+                        <Search className="h-5 w-5" />
                     </Button>
                 </div>
                 <div className='flex gap-5 border p-6 rounded-sm'>

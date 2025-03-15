@@ -31,13 +31,13 @@ const FilterCard = () => {
     useEffect(() => {
         const locations = new Set();
         const industries = new Set();
-        const salaries = new Set();
+        // const salaries = new Set();
         const jobType = new Set();
 
         allJobs.forEach(job => {
             locations.add(job.location);
             industries.add(job.title);
-            salaries.add(job.salary);
+            // salaries.add(job.salary);
             jobType.add(job.jobType);
         });
 
@@ -46,32 +46,42 @@ const FilterCard = () => {
         const newFilterData = [
             { filterType: "Location", array: Array.from(locations) },
             { filterType: "Designation", array: Array.from(industries) },
-            { filterType: "Salary", array: Array.from(salaries) },
+            // { filterType: "Salary", array: Array.from(salaries) },
             { filterType: "Job Type", array: Array.from(jobType) },
         ];
 
         setFilterData(newFilterData);
     }, [allJobs]);
 
-    console.log(filterData);
 
     return (
-        <div className='w-full bg-white p-3 rounded-md'>
-            <div className='flex justify-between items-center'>
-                <h1 className='font-bold text-lg'>Filter Jobs</h1>
-                <FilterX className='cursor-pointer text-yellow-600' onClick={handleClear} />
+        <div className="w-full bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-xl p-5">
+            <div className="flex justify-between items-center">
+                <h1 className="font-semibold text-xl text-gray-800">Filter Jobs</h1>
+                <FilterX
+                    className="cursor-pointer text-yellow-500 hover:text-yellow-600 transition-colors duration-200"
+                    onClick={handleClear}
+                />
             </div>
-            <hr className='mt-3' />
+
+            <hr className="mt-4 border-gray-200" />
+
             <RadioGroup value={selectedValue} onValueChange={changeHandler}>
                 {filterData.map((data, index) => (
-                    <div key={index} className='border p-4 rounded-sm mt-2'>
-                        <h1 className='font-bold text-lg'>{data.filterType}</h1>
+                    <div key={index} className="bg-gray-100 hover:bg-gray-200/70 transition-colors duration-200 rounded-lg p-4 mt-4 shadow-sm">
+                        <h2 className="font-semibold text-lg text-gray-700 mb-2">{data.filterType}</h2>
                         {data.array.map((item, idx) => {
                             const itemId = `id${index}-${idx}`;
                             return (
-                                <div className='flex items-center space-x-2 my-2' key={itemId}>
-                                    <RadioGroupItem value={item} id={itemId} />
-                                    <Label htmlFor={itemId}>{item}</Label>
+                                <div className="flex items-center space-x-2 my-3" key={itemId}>
+                                    <RadioGroupItem
+                                        value={item}
+                                        id={itemId}
+                                        className="text-yellow-500 border-yellow-400"
+                                    />
+                                    <Label htmlFor={itemId} className="text-gray-600 hover:text-gray-800 cursor-pointer transition-colors">
+                                        {item}
+                                    </Label>
                                 </div>
                             );
                         })}
