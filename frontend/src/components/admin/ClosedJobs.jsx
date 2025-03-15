@@ -11,6 +11,7 @@ import axios from 'axios'
 import { JOB_API_END_POINT } from '@/utils/constant'
 import { Input } from '../ui/input'
 import Navbar from '../shared/Navbar'
+import { Button } from '../ui/button'
 
 const ClosedJobs = () => {
     const { allAdminJobs, searchJobByText } = useSelector(store => store.job);
@@ -94,13 +95,15 @@ const ClosedJobs = () => {
             <Navbar />
             <div className='max-w-6xl mx-auto my-10'>
                 <div className=' my-5'>
-                    <div>
+                    <div className='flex justify-between'>
                         <Input
                             className="w-fit"
                             placeholder="Filter by name, role"
                             onChange={(e) => setInput(e.target.value)}
                         />
+                    <Button onClick={() => navigate("/admin/jobs")}>All Jobs</Button>
                     </div>
+
                     <div>
                         <Table>
                             <TableCaption>A list of your recent Closed jobs</TableCaption>

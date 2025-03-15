@@ -17,17 +17,9 @@ const JobDescription = () => {
     const [isApplied, setIsApplied] = useState(isIntiallyApplied);
     const [isJobOpen, setIsJobOpen] = useState(singleJob?.jobStatus === "Open");
 
-
     useEffect(() => {
         setIsJobOpen(singleJob?.jobStatus === "Open"); // Directly check if job is open
     }, [singleJob]);
-
-    console.log(singleJob, isJobOpen);
-
-
-
-
-
 
     const params = useParams();
     const jobId = params.id;
@@ -65,6 +57,18 @@ const JobDescription = () => {
         fetchSingleJob();
     }, [jobId, dispatch, user?._id]);
 
+    const handleJobApply = () => {
+        if (isJobOpen) {
+            if (!isApplied) {
+                applyJobHandler();
+            } else {
+                toast.error("You have already applied to this job!")
+            }
+        } else {
+            toast.success("You cannot apply to this job, this job might be expired!");
+        }
+    }
+
     return (
         <div className='max-w-7xl mx-auto px-4 py-10'>
             <Navbar />
@@ -76,23 +80,15 @@ const JobDescription = () => {
                         <Badge className='text-red-600 font-bold' variant="outline">{singleJob?.jobType}</Badge>
                         <Badge className='text-purple-700 font-bold' variant="outline">{singleJob?.salary} LPA</Badge>
                     </div>
-                    <Button
-                        onClick={() => {
+                    {user && (
+                        <Button
+                            onClick={handleJobApply}
+                            className={`w-full sm:w-auto font-semibold rounded-lg px-6 py-2 transition-colors duration-300 ${isApplied ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-purple-700 text-white hover:bg-purple-800'}`}
+                        >
+                            {isApplied ? 'Already Applied' : 'Apply Now'}
+                        </Button>
+                    )}
 
-                            if (isJobOpen) {
-                                if (!isApplied) {
-                                    applyJobHandler();
-                                } else {
-                                    toast.error("You have already applied to this job!")
-                                }
-                            } else {
-                                toast.success("You cannot apply to this job, this job might be expired!");
-                            }
-                        }}
-                        className={`w-full sm:w-auto font-semibold rounded-lg px-6 py-2 transition-colors duration-300 ${isApplied ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-purple-700 text-white hover:bg-purple-800'}`}
-                    >
-                        {isApplied ? 'Already Applied' : 'Apply Now'}
-                    </Button>
                 </div>
                 <div className='border-t border-gray-200'>
                     <div className='p-5'>
